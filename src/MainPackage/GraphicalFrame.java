@@ -10,8 +10,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 
-public class GraphicalFrame extends JFrame implements Observer {
+public class GraphicalFrame extends JFrame implements Observer,Strategy {
     private GameModel model;
+    private int lastPressed;
     private final Dimension dimension;
     private final PictureComponent[][] components;
     private static File BLANK_FILE;
@@ -21,10 +22,12 @@ public class GraphicalFrame extends JFrame implements Observer {
     private static File PLAYER_FILE;
     private static File WALL_FILE;
 
+
     public GraphicalFrame(GameModel nmodel){
         setTitle("Sokoban Game");
         loader();
         model = nmodel;
+        lastPressed = 0;
         dimension = model.getD();
         components = new PictureComponent[dimension.width][dimension.height];
         setLayout(new GridLayout(dimension.height, dimension.width, 0, 0));
@@ -44,13 +47,15 @@ public class GraphicalFrame extends JFrame implements Observer {
             @Override
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyCode()==KeyEvent.VK_RIGHT)
-                    model.goRight();
+                    lastPressed = GameModel.GO_RIGHT;
                 else if(e.getKeyCode()==KeyEvent.VK_LEFT)
-                    model.goLeft();
+                    lastPressed = GameModel.GO_LEFT;
                 else if(e.getKeyCode()==KeyEvent.VK_UP)
-                    model.goUP();
+                    lastPressed = GameModel.GO_UP;
                 else if(e.getKeyCode()==KeyEvent.VK_DOWN)
-                    model.goDown();
+                    lastPressed = GameModel.GO_DOWN;
+                model.move();
+                lastPressed = GameModel.DO_NOTHING;
             }
 
             @Override
@@ -100,5 +105,10 @@ public class GraphicalFrame extends JFrame implements Observer {
         CRATE_MARKED_FILE = new File("Icons/cratemarked.png");
         PLAYER_FILE = new File("Icons/player.png");
         WALL_FILE = new File("Icons/wall.png");
+    }
+
+    @Override
+    public int moveType() {
+        return lastPressed;
     }
 }

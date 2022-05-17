@@ -12,6 +12,13 @@ public abstract class GameModel {
     private final ArrayList<Wall> walls;
     private final Player player;
     private final ArrayList<Observer> observers;
+    private Strategy strategy;
+
+    public static final int DO_NOTHING = 0;
+    public static final int GO_RIGHT = 1;
+    public static final int GO_LEFT = 2;
+    public static final int GO_UP = 3;
+    public static final int GO_DOWN = 4;
 
     public GameModel(int dx, int dy) {
         d = new Dimension(dx, dy);
@@ -20,6 +27,10 @@ public abstract class GameModel {
         walls = new ArrayList<>();
         player = new Player();
         observers = new ArrayList<>();
+    }
+
+    public void setStrategy(Strategy strategy) {
+        this.strategy = strategy;
     }
 
     public boolean checkWin() {
@@ -105,6 +116,18 @@ public abstract class GameModel {
     public void addMarkedBox(int i, int j) {
         blankMarkedBoxes.add(new BlankMarkedBox(i, j));
         updateThings();
+    }
+
+    public void move() {
+        int mvt = strategy.moveType();
+        if (mvt == GO_RIGHT)
+            goRight();
+        else if (mvt == GO_LEFT)
+            goLeft();
+        else if (mvt == GO_UP)
+            goUP();
+        else if (mvt == GO_DOWN)
+            goDown();
     }
 
     public void goRight() {

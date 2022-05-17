@@ -13,7 +13,8 @@ public class GameRunner implements Observer {
     private PrintObserver printObserver;
     private int levelNumber;
     private final ArrayList<Class<?>> levelsClasses;
-    public GameRunner(){
+
+    public GameRunner() {
         levelNumber = 0;
         levelsClasses = new ArrayList<>();
         levelsClasses.add(FirstLevelModel.class);
@@ -26,15 +27,16 @@ public class GameRunner implements Observer {
         frame = new GraphicalFrame(gameModel);
         printObserver = new PrintObserver(gameModel);
         gameModel.addObserver(this);
+        gameModel.setStrategy(frame);
         gameModel.addObserver(frame);
         gameModel.addObserver(printObserver);
     }
 
     @Override
     public void stateChanged() {
-        if(gameModel.checkWin()) {
+        if (gameModel.checkWin()) {
             levelNumber++;
-            if(levelNumber>=levelsClasses.size())
+            if (levelNumber >= levelsClasses.size())
                 return;
             try {
                 gameModel = (GameModel) levelsClasses.get(levelNumber).newInstance();
@@ -45,10 +47,10 @@ public class GameRunner implements Observer {
             frame = new GraphicalFrame(gameModel);
             printObserver.setModel(gameModel);
             gameModel.addObserver(this);
+            gameModel.setStrategy(frame);
             gameModel.addObserver(frame);
             gameModel.addObserver(printObserver);
-        }
-        else if(gameModel.checkLose()){
+        } else if (gameModel.checkLose()) {
             try {
                 gameModel = (GameModel) levelsClasses.get(levelNumber).newInstance();
             } catch (InstantiationException | IllegalAccessException e) {
