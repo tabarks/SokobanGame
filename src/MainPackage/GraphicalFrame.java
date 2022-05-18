@@ -13,8 +13,8 @@ import java.io.File;
 public class GraphicalFrame extends JFrame implements Observer,Strategy {
     private GameModel model;
     private int lastPressed;
-    private final Dimension dimension;
-    private final PictureComponent[][] components;
+    private Dimension dimension;
+    private PictureComponent[][] components;
     private static File BLANK_FILE;
     private static File BLANK_MARKED_FILE;
     private static File CRATE_FILE;
@@ -27,7 +27,6 @@ public class GraphicalFrame extends JFrame implements Observer,Strategy {
         setTitle("Sokoban Game");
         loader();
         model = nmodel;
-        lastPressed = 0;
         dimension = model.getD();
         components = new PictureComponent[dimension.width][dimension.height];
         setLayout(new GridLayout(dimension.height, dimension.width, 0, 0));
@@ -54,8 +53,7 @@ public class GraphicalFrame extends JFrame implements Observer,Strategy {
                     lastPressed = GameModel.GO_UP;
                 else if(e.getKeyCode()==KeyEvent.VK_DOWN)
                     lastPressed = GameModel.GO_DOWN;
-                model.move();
-                lastPressed = GameModel.DO_NOTHING;
+                model.accept(GraphicalFrame.this);
             }
 
             @Override
@@ -66,7 +64,7 @@ public class GraphicalFrame extends JFrame implements Observer,Strategy {
 
         stateChanged();
         setResizable(false);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setVisible(true);
     }
@@ -94,8 +92,24 @@ public class GraphicalFrame extends JFrame implements Observer,Strategy {
         components[model.getPlayer().getI()][model.getPlayer().getJ()].changeImage(PLAYER_FILE);
     }
 
-    public void setModel(GameModel m){
-        model = m;
+    public void setModel(GameModel nmodel){
+        for (int j = 0; j < dimension.height; j++) {
+            for (int i = 0; i < dimension.width; i++) {
+                remove(components[i][j]);
+            }
+        }
+        model = nmodel;
+        dimension = model.getD();
+        components = new PictureComponent[dimension.width][dimension.height];
+        setLayout(new GridLayout(dimension.height, dimension.width, 0, 0));
+        for (int j = 0; j < dimension.height; j++) {
+            for (int i = 0; i < dimension.width; i++) {
+                components[i][j] = new PictureComponent(BLANK_FILE);
+                add(components[i][j]);
+            }
+        }
+        stateChanged();
+        pack();
     }
 
     public static void loader(){
@@ -109,6 +123,8 @@ public class GraphicalFrame extends JFrame implements Observer,Strategy {
 
     @Override
     public int moveType() {
-        return lastPressed;
+        int retValue = lastPressed;
+        lastPressed = GameModel.DO_NOTHING;
+        return retValue;
     }
 }

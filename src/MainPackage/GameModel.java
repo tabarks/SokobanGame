@@ -12,7 +12,6 @@ public abstract class GameModel {
     private final ArrayList<Wall> walls;
     private final Player player;
     private final ArrayList<Observer> observers;
-    private Strategy strategy;
 
     public static final int DO_NOTHING = 0;
     public static final int GO_RIGHT = 1;
@@ -27,10 +26,6 @@ public abstract class GameModel {
         walls = new ArrayList<>();
         player = new Player();
         observers = new ArrayList<>();
-    }
-
-    public void setStrategy(Strategy strategy) {
-        this.strategy = strategy;
     }
 
     public boolean checkWin() {
@@ -93,7 +88,7 @@ public abstract class GameModel {
         return player;
     }
 
-    private void updateThings() {
+    protected void updateThings() {
         for (CrateBox c : crateBoxes) {
             boolean marked = false;
             for (BlankMarkedBox s : blankMarkedBoxes) {
@@ -118,7 +113,7 @@ public abstract class GameModel {
         updateThings();
     }
 
-    public void move() {
+    public void accept(Strategy strategy) {
         int mvt = strategy.moveType();
         if (mvt == GO_RIGHT)
             goRight();
@@ -130,7 +125,7 @@ public abstract class GameModel {
             goDown();
     }
 
-    public void goRight() {
+    private void goRight() {
         if (player.getI() + 1 >= d.width)
             return;
         if (GridThing.listChecker(walls, player.getI() + 1, player.getJ()) != null) {
@@ -149,7 +144,7 @@ public abstract class GameModel {
         updateThings();
     }
 
-    public void goLeft() {
+    private void goLeft() {
         if (player.getI() - 1 < 0)
             return;
         if (GridThing.listChecker(walls, player.getI() - 1, player.getJ()) != null) {
@@ -168,7 +163,7 @@ public abstract class GameModel {
         updateThings();
     }
 
-    public void goUP() {
+    private void goUP() {
         if (player.getJ() - 1 < 0)
             return;
         if (GridThing.listChecker(walls, player.getI(), player.getJ() - 1) != null) {
@@ -187,7 +182,7 @@ public abstract class GameModel {
         updateThings();
     }
 
-    public void goDown() {
+    private void goDown() {
         if (player.getJ() + 1 >= d.height)
             return;
         if (GridThing.listChecker(walls, player.getI(), player.getJ() + 1) != null) {
