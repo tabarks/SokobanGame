@@ -25,11 +25,11 @@ public class SoundObserver implements Observer {
     @Override
     public void stateChanged() {
         if (gameModel.checkWin()) {
-            //play("sounds/movingsound.wav");
+            play("sounds/beep.wav");
         } else if (gameModel.checkLose()) {
-            //play("sounds/gameOpener.wav");
+            play("sounds/gameOpener.wav");
         } else {
-            //play("sounds/movingsound.wav");
+            play("sounds/movingsound.wav");
         }
     }
 
