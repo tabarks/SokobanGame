@@ -3,7 +3,7 @@ import MainPackage.*;
 
 public class SecondLevelModel extends GameModel {
     public SecondLevelModel(){
-        super(8, 9);
+        super(8, 8);
         setPlayerPos(2, 1);
 
         addCrateBox(3, 2);

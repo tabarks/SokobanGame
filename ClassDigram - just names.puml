@@ -1,0 +1,62 @@
+@startuml
+class GridThings.CrateBox
+class MainPackage.PictureComponent
+abstract class GridThings.GridThing
+class Levels.SecondLevelModel
+interface MainPackage.Strategy
+class MainPackage.PrintObserver
+class GridThings.Player
+class Levels.FirstLevelModel
+class Levels.ThirdLevelModel
+interface MainPackage.Observer
+class GridThings.BlankMarkedBox
+class MainPackage.GameRunner
+class GridThings.Wall
+class MainPackage.FileStrategy
+class MainPackage.GraphicalFrame
+class MainPackage.SoundObserver
+abstract class MainPackage.GameModel
+
+hide members
+
+MainPackage.GameModel <|-u- Levels.FirstLevelModel
+MainPackage.GameModel <|-u- Levels.SecondLevelModel
+MainPackage.GameModel <|-u- Levels.ThirdLevelModel
+
+MainPackage.JComponent <|-l- MainPackage.PictureComponent
+
+MainPackage.Observer <|.. MainPackage.PrintObserver
+GridThings.GridThing <|-- GridThings.CrateBox
+GridThings.GridThing <|-- GridThings.Player
+GridThings.GridThing <|-- GridThings.BlankMarkedBox
+GridThings.GridThing <|-- GridThings.Wall
+
+
+
+MainPackage.Observer <|.. MainPackage.GameRunner
+MainPackage.Strategy <|.r. MainPackage.FileStrategy
+MainPackage.Observer <|.. MainPackage.GraphicalFrame
+MainPackage.Strategy <|.. MainPackage.GraphicalFrame
+MainPackage.JFrame <|-- MainPackage.GraphicalFrame
+MainPackage.Observer <|.. MainPackage.SoundObserver
+
+MainPackage.GameModel "1" *-d- "1" GridThings.Player
+MainPackage.GameModel "1" *-d- "0..*" GridThings.Wall
+MainPackage.GameModel "1" *-d- "0..*" GridThings.CrateBox
+MainPackage.GameModel "1" *-d- "0..*" GridThings.BlankMarkedBox
+
+
+MainPackage.SoundObserver  *-d- MainPackage.GameModel
+MainPackage.GraphicalFrame *-r- MainPackage.GameModel
+MainPackage.PrintObserver *-- MainPackage.GameModel
+MainPackage.GameRunner *-u- MainPackage.GameModel
+MainPackage.GraphicalFrame *-r- MainPackage.PictureComponent
+
+'MainPackage.GameRunner .u.> Levels.FirstLevelModel
+'MainPackage.GameRunner .u.> Levels.SecondLevelModel
+MainPackage.GameModel "1" *-- "0..*" MainPackage.Observer
+
+'Levels.FirstLevelModel -[hidden]-- Levels.SecondLevelModel
+'Levels.SecondLevelModel -[hidden]-- Levels.ThirdLevelModel
+'MainPackage +-u- Levels
+@enduml
