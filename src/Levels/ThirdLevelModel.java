@@ -4,7 +4,7 @@ import MainPackage.GameModel;
 
 public class ThirdLevelModel extends GameModel {
     public ThirdLevelModel(){
-        super(8, 9);
+        super(8, 8);
         setPlayerPos(3, 1);
 
         addWall(2, 7);
