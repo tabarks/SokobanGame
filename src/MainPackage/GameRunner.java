@@ -12,7 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 public class GameRunner implements Observer {
-    private static GameModel gameModel;
+    private GameModel gameModel;
     private int levelNumber;
     private final ArrayList<Observer> observers;
     private final ArrayList<Class<? extends GameModel>> levelsClasses;
@@ -50,7 +50,7 @@ public class GameRunner implements Observer {
     }
 
 
-    public static  GameModel getModel () {
+    public  GameModel getModel () {
         return  gameModel;
     }
 
@@ -75,7 +75,8 @@ public class GameRunner implements Observer {
         FileStrategy fileStrategy = new FileStrategy(new File("src/steps.txt"));
 
         Timer timer = new Timer(300, new ActionListener() {
-            public void actionPerformed(ActionEvent e) {GameRunner.getModel().accept(fileStrategy);
+            public void actionPerformed(ActionEvent e) {
+                gameRunner.getModel().accept(fileStrategy);
            }
        });
         timer.start();
