@@ -4,12 +4,15 @@ import Levels.FirstLevelModel;
 import Levels.SecondLevelModel;
 import Levels.ThirdLevelModel;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 public class GameRunner implements Observer {
-    private GameModel gameModel;
+    private static GameModel gameModel;
     private int levelNumber;
     private final ArrayList<Observer> observers;
     private final ArrayList<Class<? extends GameModel>> levelsClasses;
@@ -46,6 +49,12 @@ public class GameRunner implements Observer {
         gameModel = model;
     }
 
+
+    public static  GameModel getModel () {
+        return  gameModel;
+    }
+
+
     private void newGameModel() {
         try {
             gameModel = levelsClasses.get(levelNumber).getDeclaredConstructor().newInstance();
@@ -65,12 +74,11 @@ public class GameRunner implements Observer {
 
         FileStrategy fileStrategy = new FileStrategy(new File("src/steps.txt"));
 
-        //Timer timer = new Timer(200, new ActionListener() {
-          //  public void actionPerformed(ActionEvent e) {
-            //    gameModel.accept(fileStrategy);
-           // }
-       // });
-        //timer.start();
+        Timer timer = new Timer(300, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {GameRunner.getModel().accept(fileStrategy);
+           }
+       });
+        timer.start();
 
         GraphicalFrame frame = new GraphicalFrame(gameModel);
         gameRunner.addObserver(frame);
