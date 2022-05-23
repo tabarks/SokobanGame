@@ -74,12 +74,12 @@ public class GameRunner implements Observer {
 
         FileStrategy fileStrategy = new FileStrategy(new File("src/steps.txt"));
 
-        Timer timer = new Timer(300, new ActionListener() {
+        Timer timer = new Timer(100, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 gameRunner.getModel().accept(fileStrategy);
            }
        });
-        timer.start();
+       //timer.start();
 
         GraphicalFrame frame = new GraphicalFrame(gameModel);
         gameRunner.addObserver(frame);
