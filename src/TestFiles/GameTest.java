@@ -81,7 +81,7 @@ public class GameTest {
         }
         if(c!=null) {
             assertFalse(c.isMarked());
-            gameModel.accept(() -> 4);
+            gameModel.accept(() -> GameModel.GO_DOWN);
             assertTrue(c.isMarked());
         } else {
             fail("can't find the crate box");
