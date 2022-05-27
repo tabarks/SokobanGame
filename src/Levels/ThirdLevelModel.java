@@ -3,6 +3,9 @@ package Levels;
 import MainPackage.GameModel;
 
 public class ThirdLevelModel extends GameModel {
+    /**
+     * defining and setting the Third Level data.
+     */
     public ThirdLevelModel(){
         super(8, 8);
         setPlayerPos(3, 1);

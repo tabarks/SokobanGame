@@ -2,6 +2,9 @@ package Levels;
 import MainPackage.*;
 
 public class FirstLevelModel extends GameModel {
+    /**
+     * defining and setting the First Level data.
+     */
     public FirstLevelModel() {
         super(8, 9);
 

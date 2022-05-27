@@ -4,13 +4,23 @@ import GridThings.BlankMarkedBox;
 import GridThings.CrateBox;
 import GridThings.Wall;
 
+/**
+ * An Observer class that used to print the state of GameModel whenever changes occur to it.
+ */
 public class PrintObserver implements Observer {
     private GameModel model;
 
+    /**
+     * Constructor Method of PrintObserver Class
+     * @param m set the GameModel Object we use
+     */
     public PrintObserver(GameModel m) {
         model = m;
     }
 
+    /**
+     * Make a print to the game state, when changes are made to GameModel.
+     */
     @Override
     public void stateChanged() {
         StringBuilder[] s = new StringBuilder[model.getD().height + 2];
@@ -46,6 +56,10 @@ public class PrintObserver implements Observer {
             System.out.println(s1);
     }
 
+    /**
+     * When the model is changed, this Method used to set the new Model in the Observer.
+     * @param m the new Model
+     */
     public void setModel(GameModel m){
         model = m;
     }
