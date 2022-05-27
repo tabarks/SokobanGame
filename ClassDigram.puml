@@ -63,6 +63,9 @@ class MainPackage.GameRunner {
 + void stateChanged()
 + void setModel(GameModel)
 - void newGameModel()
++ void changeModel(GameModel)
++ void startFileStrategyStart()
++ void stopFileStrategyStart()
 + {static} void main(String[])
 }
 class GridThings.Wall {
@@ -97,6 +100,12 @@ class MainPackage.SoundObserver {
 + void stateChanged()
 + void setModel(GameModel)
 }
+class MainPackage.GameLoader{
++ <<Create>> GameLoader(String)
+}
+class MainPackage.GameSaver{
++ {static} void save(GameModel, String)
+}
 abstract class MainPackage.GameModel {
 - Dimension d
 - ArrayList<CrateBox> crateBoxes
@@ -114,6 +123,7 @@ abstract class MainPackage.GameModel {
 + boolean checkLose()
 + void addObserver(Observer)
 + Dimension getD()
++ void setD(Dimension)
 + ArrayList<CrateBox> getCrateBoxes()
 + ArrayList<BlankMarkedBox> getBlankMarkedBoxes()
 + ArrayList<Wall> getWalls()
@@ -129,8 +139,10 @@ abstract class MainPackage.GameModel {
 - void goUP()
 - void goDown()
 }
-
-MainPackage.GameModel <|-- Levels.FirstLevelModel
+MainPackage.GraphicalFrame *-- MainPackage.GameRunner
+MainPackage.GraphicalFrame --> MainPackage.GameSaver
+MainPackage.GraphicalFrame --> MainPackage.GameLoader
+MainPackage.GameModel <|-r- Levels.FirstLevelModel
 MainPackage.GameModel <|-- Levels.SecondLevelModel
 MainPackage.GameModel <|-- Levels.ThirdLevelModel
 
@@ -145,7 +157,7 @@ GridThings.GridThing <|-- GridThings.Wall
 
 
 MainPackage.Observer <|.. MainPackage.GameRunner
-MainPackage.Strategy <|.r. MainPackage.FileStrategy
+MainPackage.Strategy <|.. MainPackage.FileStrategy
 MainPackage.Observer <|.. MainPackage.GraphicalFrame
 MainPackage.Strategy <|.. MainPackage.GraphicalFrame
 MainPackage.JFrame <|-- MainPackage.GraphicalFrame
@@ -157,11 +169,11 @@ MainPackage.GameModel "1" *-- "0..*" GridThings.CrateBox
 MainPackage.GameModel "1" *-- "0..*" GridThings.BlankMarkedBox
 
 
-MainPackage.SoundObserver  *-d- MainPackage.GameModel
-MainPackage.GraphicalFrame *-r- MainPackage.GameModel
+MainPackage.SoundObserver  *-- MainPackage.GameModel
+MainPackage.GraphicalFrame *-- MainPackage.GameModel
 MainPackage.PrintObserver *-- MainPackage.GameModel
-MainPackage.GameRunner *-u- MainPackage.GameModel
-MainPackage.GraphicalFrame *-r- MainPackage.PictureComponent
+MainPackage.GameRunner *-- MainPackage.GameModel
+MainPackage.GraphicalFrame *-- MainPackage.PictureComponent
 
 'MainPackage.GameRunner .u.> Levels.FirstLevelModel
 'MainPackage.GameRunner .u.> Levels.SecondLevelModel
