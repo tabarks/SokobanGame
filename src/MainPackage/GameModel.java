@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * </ol>
  */
 public abstract class GameModel {
-    private final Dimension d;
+    private Dimension d;
     private final ArrayList<CrateBox> crateBoxes;
     private final ArrayList<BlankMarkedBox> blankMarkedBoxes;
     private final ArrayList<Wall> walls;
@@ -91,6 +91,13 @@ public abstract class GameModel {
      */
     public Dimension getD() {
         return d;
+    }
+
+    /**
+     * set the Dimension of the game.
+     */
+    public void setD(Dimension d1) {
+        d = d1;
     }
 
     /**

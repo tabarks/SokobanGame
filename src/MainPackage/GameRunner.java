@@ -3,6 +3,8 @@ package MainPackage;
 import Levels.FirstLevelModel;
 import Levels.SecondLevelModel;
 import Levels.ThirdLevelModel;
+
+import javax.swing.*;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -20,12 +22,16 @@ public class GameRunner implements Observer {
     private int levelNumber;
     private final ArrayList<Observer> observers;
     private final ArrayList<Class<? extends GameModel>> levelsClasses;
+    private Timer timer;
 
     /**
      * Constructor Method of GameRunner Class.
      * @param ngameModel the first game model that game runner will use.
      */
-    public GameRunner(GameModel ngameModel) {
+    public GameRunner(GameModel ngameModel, String fileName) {
+        FileStrategy fileStrategy = new FileStrategy(new File(fileName));
+        timer = new Timer(100, e -> getModel().accept(fileStrategy));
+
         levelNumber = 0;
         gameModel = ngameModel;
 
@@ -77,18 +83,35 @@ public class GameRunner implements Observer {
     }
 
     /**
-     * Make a new instance of the current level class, then add the Observers we have to this new GameModel Object.
+     * Make a new instance of the current level class.
      */
     private void newGameModel() {
         try {
-            gameModel = levelsClasses.get(levelNumber).getDeclaredConstructor().newInstance();
-            for (Observer o : observers) {
-                o.setModel(gameModel);
-                gameModel.addObserver(o);
-            }
+            GameModel model = levelsClasses.get(levelNumber).getDeclaredConstructor().newInstance();
+            changeModel(model);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * this method will add the Observers we have to a new GameModel Object.
+     * @param model the new game model we will use.
+     */
+    public void changeModel(GameModel model){
+        for (Observer o : observers) {
+            o.setModel(model);
+            model.addObserver(o);
+            o.stateChanged();
+        }
+    }
+
+    public void startFileStrategyStart(){
+        timer.start();
+    }
+
+    public void stopFileStrategyStart(){
+        timer.stop();
     }
 
     /**
@@ -98,14 +121,9 @@ public class GameRunner implements Observer {
     public static void main(String[] args) {
         GameModel gameModel = new FirstLevelModel();
 
-        GameRunner gameRunner = new GameRunner(gameModel);
+        GameRunner gameRunner = new GameRunner(gameModel, "src/steps.txt");
 
-        FileStrategy fileStrategy = new FileStrategy(new File("src/steps.txt"));
-
-        //Timer timer = new Timer(100, e -> gameRunner.getModel().accept(fileStrategy));
-        //timer.start();
-
-        GraphicalFrame frame = new GraphicalFrame(gameModel);
+        GraphicalFrame frame = new GraphicalFrame(gameModel, gameRunner);
         gameRunner.addObserver(frame);
 
         PrintObserver printObserver = new PrintObserver(gameModel);
