@@ -24,12 +24,13 @@ abstract class GridThings.GridThing {
 + void goDown()
 + {static} GridThing listChecker(ArrayList<? extends GridThing>,int,int)
 }
-class Levels.SecondLevelModel {
-+ <<Create>> SecondLevelModel()
-}
 class Levels.ThirdLevelModel {
 + <<Create>> ThirdLevelModel()
 }
+class Levels.SecondLevelModel {
++ <<Create>> SecondLevelModel()
+}
+
 interface MainPackage.Strategy {
 ~ int moveType()
 }
